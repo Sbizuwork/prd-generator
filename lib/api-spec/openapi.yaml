@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: prd
+    description: PRD generation
 paths:
   /healthz:
     get:
@@ -24,6 +26,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /prd/generate:
+    post:
+      operationId: generatePrd
+      tags: [prd]
+      summary: Generate a drafted, critiqued, and revised PRD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GeneratePrdInput"
+      responses:
+        "200":
+          description: Generated PRD passes
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/GeneratePrdResult"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: OpenRouter request failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +65,40 @@ components:
           type: string
       required:
         - status
+    GeneratePrdInput:
+      type: object
+      properties:
+        idea:
+          type: string
+          minLength: 3
+          maxLength: 280
+        targetUser:
+          type: string
+          maxLength: 160
+      required:
+        - idea
+    GeneratePrdResult:
+      type: object
+      properties:
+        draft:
+          type: string
+        critique:
+          type: string
+        revised:
+          type: string
+        mode:
+          type: string
+          enum: [demo, live]
+      required:
+        - draft
+        - critique
+        - revised
+        - mode
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 

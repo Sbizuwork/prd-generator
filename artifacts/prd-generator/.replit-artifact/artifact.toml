@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "PRD Generator"
+description = "A focused product planning tool that turns a feature idea into a first-draft PRD, a skeptical stakeholder critique, and a revised specification, with downloadable Markdown."
+version = "1.0.0"
+id = "artifacts/prd-generator"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25130
+
+[services.development]
+run = "pnpm --filter @workspace/prd-generator run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/prd-generator", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/prd-generator/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25130"
+BASE_PATH = "/"
