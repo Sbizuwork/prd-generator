@@ -27,7 +27,6 @@ No API key? The app runs in demo mode with realistic sample outputs so the full 
 
 - Replit (app built and hosted from a single workspace)
 - OpenRouter (one API for the drafter and critic models)
-- Product School AI tools program (tool access)
 
 ## Roadmap
 
